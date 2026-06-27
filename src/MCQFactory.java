@@ -1,19 +1,27 @@
 public class MCQFactory implements QuestionFactory {
+    private final QuestionSource questionSource;
+
+    public MCQFactory(QuestionSource questionSource) {
+        if (questionSource == null) {
+            throw new IllegalArgumentException(
+                    "Question source cannot be null."
+            );
+        }
+
+        this.questionSource = questionSource;
+    }
 
     @Override
     public Question createQuestion() {
-        return new MCQQuestion(
-                "Which SOLID principle says a class should have one reason to change?",
-                new String[]{
-                        "Open/Closed Principle",
-                        "Single Responsibility Principle",
-                        "Liskov Substitution Principle",
-                        "Dependency Inversion Principle"
-                },
-                "B",
-                2,
-                "Medium"
-        );
+        Question question = questionSource.getQuestion();
+
+        if (!(question instanceof MCQQuestion)) {
+            throw new IllegalStateException(
+                    "MCQFactory requires an MCQQuestion source."
+            );
+        }
+
+        return question;
     }
 
     @Override

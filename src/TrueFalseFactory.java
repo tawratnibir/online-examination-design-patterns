@@ -1,13 +1,27 @@
 public class TrueFalseFactory implements QuestionFactory {
+    private final QuestionSource questionSource;
+
+    public TrueFalseFactory(QuestionSource questionSource) {
+        if (questionSource == null) {
+            throw new IllegalArgumentException(
+                    "Question source cannot be null."
+            );
+        }
+
+        this.questionSource = questionSource;
+    }
 
     @Override
     public Question createQuestion() {
-        return new TrueFalseQuestion(
-                "An interface can be instantiated directly in Java.",
-                false,
-                1,
-                "Easy"
-        );
+        Question question = questionSource.getQuestion();
+
+        if (!(question instanceof TrueFalseQuestion)) {
+            throw new IllegalStateException(
+                    "TrueFalseFactory requires a TrueFalseQuestion source."
+            );
+        }
+
+        return question;
     }
 
     @Override

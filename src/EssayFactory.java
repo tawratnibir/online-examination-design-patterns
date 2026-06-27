@@ -1,17 +1,27 @@
 public class EssayFactory implements QuestionFactory {
+    private final QuestionSource questionSource;
+
+    public EssayFactory(QuestionSource questionSource) {
+        if (questionSource == null) {
+            throw new IllegalArgumentException(
+                    "Question source cannot be null."
+            );
+        }
+
+        this.questionSource = questionSource;
+    }
 
     @Override
     public Question createQuestion() {
-        return new EssayQuestion(
-                "Explain the benefits of encapsulation in object-oriented programming.",
-                new String[]{
-                        "data hiding",
-                        "access control",
-                        "maintainability"
-                },
-                10,
-                "Hard"
-        );
+        Question question = questionSource.getQuestion();
+
+        if (!(question instanceof EssayQuestion)) {
+            throw new IllegalStateException(
+                    "EssayFactory requires an EssayQuestion source."
+            );
+        }
+
+        return question;
     }
 
     @Override
