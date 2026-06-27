@@ -6,80 +6,56 @@ public class Main {
     }
 
     private static void demonstrateBankSource() {
-        QuestionSource bankSource =
+        QuestionSource source =
                 new BankQuestionSource(QuestionType.MCQ);
 
-        QuestionFactory factory =
-                new MCQFactory(bankSource);
+        QuestionFactory factory = new MCQFactory(source);
 
-        displayQuestionFamily(
-                "QUESTION BANK MODE",
-                factory
-        );
+        displayQuestion("Question Bank Mode", factory);
     }
 
     private static void demonstrateFakerSource() {
-        QuestionSource fakerSource =
+        QuestionSource source =
                 new FakerQuestionSource(QuestionType.ESSAY);
 
-        QuestionFactory factory =
-                new EssayFactory(fakerSource);
+        QuestionFactory factory = new EssayFactory(source);
 
-        displayQuestionFamily(
-                "FAKER MODE",
-                factory
-        );
+        displayQuestion("Faker Mode", factory);
     }
 
     private static void demonstrateManualSource() {
-        Question manualQuestion =
-                new TrueFalseQuestion(
-                        "Java supports multiple class inheritance.",
-                        false,
-                        1,
-                        "Easy"
-                );
+        Question question = new TrueFalseQuestion(
+                "Java supports multiple class inheritance.",
+                false,
+                1,
+                "Easy"
+        );
 
-        QuestionSource manualSource =
-                new ManualQuestionSource(manualQuestion);
+        QuestionSource source =
+                new ManualQuestionSource(question);
 
         QuestionFactory factory =
-                new TrueFalseFactory(manualSource);
+                new TrueFalseFactory(source);
 
-        displayQuestionFamily(
-                "MANUAL MODE",
-                factory
-        );
+        displayQuestion("Manual Mode", factory);
     }
 
-    private static void displayQuestionFamily(
+    private static void displayQuestion(
             String sourceName,
             QuestionFactory factory
     ) {
-        Question question =
-                factory.createQuestion();
+        Question question = factory.createQuestion();
+        QuestionRenderer renderer = factory.createRenderer();
+        QuestionEvaluator evaluator = factory.createEvaluator();
 
-        QuestionRenderer renderer =
-                factory.createRenderer();
-
-        QuestionEvaluator evaluator =
-                factory.createEvaluator();
-
-        System.out.println(
-                "========================================"
-        );
-
-        System.out.println(
-                "Question Source: " + sourceName
-        );
+        System.out.println("====================================");
+        System.out.println("Question Source: " + sourceName);
 
         renderer.render(question);
 
         System.out.println(
-                "Evaluator Created: "
+                "Evaluator: "
                         + evaluator.getClass().getSimpleName()
         );
-
-        System.out.println();
     }
 }
